@@ -1,0 +1,842 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+    <meta charset="utf-8" />  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">  
+    <title>Chart JS Demo</title>  
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>  
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />  
+    <script>  
+  
+    var AllUniqueCities = [];  
+    var AllCandidateCount = [];
+    var countchart, amountchart, dateCchart, dateAchart;
+    var data = [
+        {
+            "Title": "Wrong Currency",
+            "SubTeam": "FXO",
+            "Amount": 100,
+            "Occurence_Date": "1/01/2020",
+            "Issue": "People",
+            "Month": "Jan",
+            "Quarter": 202001
+        },
+        {
+            "Title": "Wrong Amount",
+            "SubTeam": "FXO",
+            "Amount": 50,
+            "Occurence_Date": "1/02/2020",
+            "Issue": "People",
+            "Month": "Feb",
+            "Quarter": 202001
+        },
+        {
+            "Title": "Error in FX Rate",
+            "SubTeam": "EQD",
+            "Amount": 900,
+            "Occurence_Date": "1/15/2020",
+            "Issue": "People",
+            "Month": "Jan",
+            "Quarter": 202001
+        },
+        {
+            "Title": "Wrong Currency",
+            "SubTeam": "CRD",
+            "Amount": 388,
+            "Occurence_Date": "3/03/2020",
+            "Issue": "Process",
+            "Month": "Mar",
+            "Quarter": 202001
+        },
+        {
+            "Title": "Wrong Bank",
+            "SubTeam": "Nostro",
+            "Amount": 1000,
+            "Occurence_Date": "3/10/2020",
+            "Issue": "Process",
+            "Month": "Mar",
+            "Quarter": 202001
+        },
+        {
+            "Title": "Wrong Account",
+            "SubTeam": "Bonds",
+            "Amount": 324,
+            "Occurence_Date": "6/06/2020",
+            "Issue": "Process",
+            "Month": "Jun",
+            "Quarter": 202002
+        },
+        {
+            "Title": "Wrong Currency",
+            "SubTeam": "Bonds",
+            "Amount": 456,
+            "Occurence_Date": "6/10/2020",
+            "Issue": "Process",
+            "Month": "Jul",
+            "Quarter": 202003
+        },
+        {
+            "Title": "Wrong Amount",
+            "SubTeam": "Bonds",
+            "Amount": 6333,
+            "Occurence_Date": "1/02/2020",
+            "Issue": "Process",
+            "Month": "Feb",
+            "Quarter": 202001
+        },
+        {
+            "Title": "Error in FX Rate",
+            "SubTeam": "Bonds",
+            "Amount": 268900,
+            "Occurence_Date": "1/15/2020",
+            "Issue": "System",
+            "Month": "Jan",
+            "Quarter": 202001
+        },
+        {
+            "Title": "Wrong Currency",
+            "SubTeam": "Bonds",
+            "Amount": 234,
+            "Occurence_Date": "10/12/2020",
+            "Issue": "System",
+            "Month": "Dec",
+            "Quarter": 202004
+        },
+        {
+            "Title": "Wrong Bank",
+            "SubTeam": "FXO",
+            "Amount": 23235,
+            "Occurence_Date": "3/10/2020",
+            "Issue": "System",
+            "Month": "Mar",
+            "Quarter": 202001
+        },
+        {
+            "Title": "Wrong Account",
+            "SubTeam": "CRD",
+            "Amount": 1434,
+            "Occurence_Date": "6/04/2020",
+            "Issue": "System",
+            "Month": "Apr",
+            "Quarter": 202002
+        },
+        {
+            "Title": "Error in FX Rate",
+            "SubTeam": "Bonds",
+            "Amount": 12424,
+            "Occurence_Date": "8/10/2020",
+            "Issue": "System",
+            "Month": "Aug",
+            "Quarter": 202002
+        },
+        {
+            "Title": "Wrong Currency",
+            "SubTeam": "Bonds",
+            "Amount": 35,
+            "Occurence_Date": "3/10/2020",
+            "Issue": "Process",
+            "Month": "Mar",
+            "Quarter": 202001
+        },
+        {
+            "Title": "Wrong Bank",
+            "SubTeam": "FXO",
+            "Amount": 536,
+            "Occurence_Date": "6/04/2020",
+            "Issue": "Process",
+            "Month": "Apr",
+            "Quarter": 202001
+        },
+        {
+            "Title": "Wrong Account",
+            "SubTeam": "CRD",
+            "Amount": 155,
+            "Occurence_Date": "8/10/2020",
+            "Issue": "Process",
+            "Month": "Aug",
+            "Quarter": 202002
+        },
+        {
+            "Title": "Wrong Bank",
+            "SubTeam": "Nostro",
+            "Amount": 15135,
+            "Occurence_Date": "5/11/2020",
+            "Issue": "Process",
+            "Month": "Nov",
+            "Quarter": 202004
+        },
+        {
+            "Title": "Wrong Currency",
+            "SubTeam": "FXO",
+            "Amount": 100,
+            "Occurence_Date": "1/01/2020",
+            "Issue": "People",
+            "Month": "Jan",
+            "Quarter": 202001
+        },
+        {
+            "Title": "Wrong Amount",
+            "SubTeam": "FXO",
+            "Amount": 50,
+            "Occurence_Date": "1/02/2020",
+            "Issue": "People",
+            "Month": "Feb",
+            "Quarter": 201901
+        },
+        {
+            "Title": "Error in FX Rate",
+            "SubTeam": "EQD",
+            "Amount": 900,
+            "Occurence_Date": "1/15/2020",
+            "Issue": "People",
+            "Month": "Jan",
+            "Quarter": 201901
+        },
+        {
+            "Title": "Wrong Currency",
+            "SubTeam": "CRD",
+            "Amount": 388,
+            "Occurence_Date": "3/10/2020",
+            "Issue": "Process",
+            "Month": "Mar",
+            "Quarter": 201901
+        },
+        {
+            "Title": "Wrong Bank",
+            "SubTeam": "Nostro",
+            "Amount": 1000,
+            "Occurence_Date": "3/10/2020",
+            "Issue": "Process",
+            "Month": "Mar",
+            "Quarter": 201901
+        },
+        {
+            "Title": "Wrong Account",
+            "SubTeam": "Bonds",
+            "Amount": 324,
+            "Occurence_Date": "6/06/2020",
+            "Issue": "Process",
+            "Month": "Jun",
+            "Quarter": 201902
+        },
+        {
+            "Title": "Wrong Currency",
+            "SubTeam": "Bonds",
+            "Amount": 456,
+            "Occurence_Date": "6/10/2020",
+            "Issue": "Process",
+            "Month": "Jul",
+            "Quarter": 201903
+        },
+        {
+            "Title": "Wrong Amount",
+            "SubTeam": "Bonds",
+            "Amount": 6333,
+            "Occurence_Date": "1/02/2020",
+            "Issue": "Process",
+            "Month": "Feb",
+            "Quarter": 201901
+        },
+        {
+            "Title": "Error in FX Rate",
+            "SubTeam": "Bonds",
+            "Amount": 268900,
+            "Occurence_Date": "1/15/2020",
+            "Issue": "System",
+            "Month": "Jan",
+            "Quarter": 201901
+        },
+        {
+            "Title": "Wrong Currency",
+            "SubTeam": "Bonds",
+            "Amount": 234,
+            "Occurence_Date": "10/12/2020",
+            "Issue": "System",
+            "Month": "Dec",
+            "Quarter": 201904
+        }
+    ];
+    var colors = [
+
+    ]
+    var uniqueTeam = {};
+    var uniqueIssue = {};
+    $(document).ready(function() {
+        getAllUniqueTeam();
+        teamCountChart();
+        teamAmountChart();
+        dateCountChart();
+        dateAmountChart();
+        $("#sortNoCount").change(function() {
+            resetChart("count");
+        });
+        $("#sortNoAmount").change(function() {
+            resetChart("amount");
+        });
+        $("#sortNoDate, #sortNoDateYear").change(function() {
+            resetChart("date-count");
+        });
+        $("#sortNoDateAmount, #sortNoDateYearAmount").change(function() {
+            resetChart("date-amount");
+        });
+    });
+    function resetChart(type) {
+        if(type == "count") {
+            countchart.destroy();
+            teamCountChart();
+        } else if(type == "amount") {
+            amountchart.destroy();
+            teamAmountChart();
+        } else if(type == "date-count") {
+            dateCchart.destroy();
+            dateCountChart();
+        } else if(type == "date-amount") {
+            dateAchart.destroy();
+            dateAmountChart();
+        }
+    }
+    function teamCountChart() {  
+        var cChart = document.getElementById('teamCountChart').getContext('2d');
+        var teamCount = teamVScount(); 
+        countchart = new Chart(cChart, {  
+        type: 'bar', // bar, horizontalBar, pie , line, doughnut, radar, polarArea  
+        data:{
+            labels: teamCount[0],  
+            datasets: [{
+                label: '# of Incidents',
+                data: teamCount[1],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.9)',
+                    'rgba(54, 162, 235, 0.9)',
+                    'rgba(255, 206, 86, 0.9)',
+                    'rgba(75, 192, 192, 0.9)',
+                    'rgba(153, 102, 255, 0.9)',
+                    'rgba(255, 159, 64, 0.9)'
+                ]
+            }],
+        },  
+        options:{  
+            scales: {  
+                yAxes: [{  
+                    ticks: {  
+                        beginAtZero: true    
+                    }  
+                }]  
+            }  
+         }  
+        });  
+    }  
+    function teamAmountChart() {  
+        var aChart = document.getElementById('teamAmountChart').getContext('2d');  
+        var teamAmount = teamVSamount();  
+        amountchart = new Chart(aChart, {  
+        type: 'bar', // bar, horizontalBar, pie , line, doughnut, radar, polarArea  
+        data:{
+            labels: teamAmount[0],  
+            datasets: [{
+                label: '# of Amount',
+                data: teamAmount[1],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.9)',
+                    'rgba(54, 162, 235, 0.9)',
+                    'rgba(255, 206, 86, 0.9)',
+                    'rgba(75, 192, 192, 0.9)',
+                    'rgba(153, 102, 255, 0.9)',
+                    'rgba(255, 159, 64, 0.9)'
+                ]
+            }],
+        },  
+        options:{  
+            scales: {  
+                yAxes: [{  
+                    ticks: {  
+                        beginAtZero: true    
+                    }  
+                }]  
+            }  
+         }  
+        });  
+    }
+    function dateCountChart() {  
+        var dChart = document.getElementById('dateCountChart').getContext('2d');  
+        var teamDate = teamVSdateCount();  
+        dateCchart = new Chart(dChart, {  
+        type: 'bar', // bar, horizontalBar, pie , line, doughnut, radar, polarArea  
+        data:{
+            labels: teamDate[0],  
+            datasets: [{
+                label: 'Total Count Issue Monthly',
+                data: teamDate[1],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.9)',
+                    'rgba(54, 162, 235, 0.9)',
+                    'rgba(255, 206, 86, 0.9)',
+                    'rgba(75, 192, 192, 0.9)',
+                    'rgba(153, 102, 255, 0.9)',
+                    'rgba(255, 159, 64, 0.9)'
+                ]
+            }],
+        },  
+        options:{  
+            scales: {  
+                yAxes: [{  
+                    ticks: {  
+                        beginAtZero: true    
+                    }  
+                }]  
+            }  
+         }  
+        });  
+    }
+    function dateAmountChart() {  
+        var dAChart = document.getElementById('dateAmountChart').getContext('2d');  
+        var teamDate = teamVSDateAmount();  
+        dateAchart = new Chart(dAChart, {  
+        type: 'bar', // bar, horizontalBar, pie , line, doughnut, radar, polarArea  
+        data:{
+            labels: teamDate[0],  
+            datasets: [{
+                label: 'Total Amount Issue Monthly',
+                data: teamDate[1],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.9)',
+                    'rgba(54, 162, 235, 0.9)',
+                    'rgba(255, 206, 86, 0.9)',
+                    'rgba(75, 192, 192, 0.9)',
+                    'rgba(153, 102, 255, 0.9)',
+                    'rgba(255, 159, 64, 0.9)'
+                ]
+            }],
+        },  
+        options:{  
+            scales: {  
+                yAxes: [{  
+                    ticks: {  
+                        beginAtZero: true    
+                    }  
+                }]  
+            }  
+         }  
+        });  
+    }        
+   /* function GetAllCities(){  
+        var AllCities = [];  
+        //var myURL = _spPageContextInfo.webAbsoluteUrl + "/_api/web/lists/GetByTitle('Score')/Items?$top=5000&$select=City";  
+        $.ajax({  
+            url: myURL,  
+            async: false,  
+            method: "GET",  
+            headers: { "Accept": "application/json; odata=verbose" },  
+            success: function (data) {  
+                if (data.d.results.length > 0) {  
+                    //alert("success");  
+                    AllCities = data.d.results;  
+                    for (var i = 0; i < Number(AllCities.length); i++){  
+                        AllUniqueCities.push(AllCities[i].City);  
+                    }     
+                      
+                    AllUniqueCities = removeDuplicates(AllUniqueCities);  
+                    //alert(AllUniqueCities.join("-"));  
+                }  
+            },  
+            error: function (error) {  
+                alert("Error: " + JSON.stringify(error));  
+            }  
+        });  
+        return AllUniqueCities;  
+    }  
+  
+    function GetCandidatesPerCity(cityArray){  
+        var searchText;  
+        for (var i = 0; i < cityArray.length; i++)  
+            {              
+                searchText = cityArray[i];  
+                var _count  = FetchCityCount(searchText);  
+                AllCandidateCount.push(_count);  
+               // alert("For " + searchText + ", count is: " + _count);  
+  
+            }  
+        return AllCandidateCount;  
+    }  
+  
+    function FetchCityCount(searchItem){  
+        var myURL = _spPageContextInfo.webAbsoluteUrl + "/_api/web/lists/GetByTitle('Score')/Items?$top=5000&$select=Title&$filter=City eq '"+ searchItem +"'";  
+        var myCandidateCount = 0;  
+        $.ajax({  
+            url: myURL,  
+            method: "GET",  
+            async: false ,  
+            headers: { "Accept": "application/json; odata=verbose" },  
+            success: function (myData1) {  
+                if (myData1.d.results.length > 0) {  
+                    myCandidateCount = myData1.d.results.length;  
+                }  
+            },  
+            error: function (error) {  
+                alert("Error: " + JSON.stringify(error));  
+            }  
+        });  
+  
+        return myCandidateCount;  
+    }  
+  
+    function removeDuplicates(arr){  
+        var unique_array = [];  
+        for(var i = 0;i < arr.length; i++){  
+            if(unique_array.indexOf(arr[i]) == -1){  
+                unique_array.push(arr[i])  
+                }  
+            }  
+        return unique_array  
+    }  */
+    function getAllUniqueIssue() {
+        for(var i = 0; i < data.length; i++) {
+            var changename = data[i].Issue.replace(/ /g,"_").toLowerCase();
+            if(!(uniqueIssue.hasOwnProperty(changename))) {
+                var t = changename;
+                uniqueIssue[t] = {
+                    name: data[i].Issue,
+                    count: 0,
+                    amount: 0
+                };
+            }
+        }
+        addIssueCount();
+        addIssueAmount();
+    }
+    function addIssueCount() {
+        for(var i = 0; i < data.length; i++) {
+            var changename =  data[i].Issue.replace(/ /g,"_").toLowerCase();
+            uniqueTeam[changename]["count"] += 1;
+        }
+    }
+    function addIssueAmount() {
+        for(var i = 0; i < data.length; i++) {
+            var changename =  data[i].Issue.replace(/ /g,"_").toLowerCase();
+            uniqueTeam[changename]["amount"] += data[i].Amount;
+        }
+    }
+    function getAllUniqueTeam() {
+        for(var i = 0; i < data.length; i++) {
+            var changename = data[i].SubTeam.replace(/ /g,"_").toLowerCase();
+            if(!(uniqueTeam.hasOwnProperty(changename))) {
+                var t = changename;
+                uniqueTeam[t] = {
+                    name: data[i].SubTeam,
+                    count: 0,
+                    amount: 0
+                };
+            }
+        }
+        addTeamCount();
+        addTeamAmount();
+    }
+    function addTeamCount() {
+        for(var i = 0; i < data.length; i++) {
+            var changename =  data[i].SubTeam.replace(/ /g,"_").toLowerCase();
+            uniqueTeam[changename]["count"] += 1;
+        }
+    }
+    function addTeamAmount() {
+        for(var i = 0; i < data.length; i++) {
+            var changename =  data[i].SubTeam.replace(/ /g,"_").toLowerCase();
+            uniqueTeam[changename]["amount"] += data[i].Amount;
+        }
+    }
+    function teamVScount() {
+        var sortedTeam = sortObject(uniqueTeam, "count", $("#sortNoCount").val());
+        var sortedValues = [];
+        var sortedName = [];
+        for(var key in sortedTeam) {
+            sortedValues.push(sortedTeam[key]["count"])
+        }
+        for(var key in sortedTeam) {
+            sortedName.push(sortedTeam[key]["name"])
+        }
+        return [sortedName, sortedValues];
+    }
+    function teamVSamount() {
+        var sortedTeam = sortObject(uniqueTeam, "amount", $("#sortNoAmount").val());
+        var sortedValues = [];
+        var sortedName = [];
+        for(var key in sortedTeam) {
+            sortedValues.push(sortedTeam[key]["amount"])
+        }
+        for(var key in sortedTeam) {
+            sortedName.push(sortedTeam[key]["name"])
+        }
+
+        return [sortedName, sortedValues];
+    }
+    function teamVSdateCount() {
+        var sortedValues = [];
+        var sortedName = [];
+        var quarterly = ["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"];
+        var monthly = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+        var quarterlyValues = [0,0,0,0];
+        var monthlyValues = [0,0,0,0,0,0,0,0,0,0,0,0];
+        var dateData = data;
+        var ddFreq = $("#sortNoDate").val();
+        var ddYear = $("#sortNoDateYear").val();
+        if(ddFreq == 'monthly') {
+            sortedName = monthly;
+            for(var i =0; i< dateData.length; i++) {
+                var x = dateData[i].Occurence_Date;
+                if(x !== '') {
+                    var xSpl = x.split("/");
+                    var mo = parseInt(xSpl[0]);
+                    if(ddYear == xSpl[2]) {
+                        monthlyValues[mo-1] += 1;
+                    }
+                }
+            }
+            sortedValues = monthlyValues;
+        }else {
+            sortedName = quarterly;
+            for(var i =0; i< dateData.length; i++) {
+                var x = dateData[i].Occurence_Date;
+                if(x !== '') {
+                    var xSpl = x.split("/");
+                    var mo = parseInt(xSpl[0]);
+                    if(ddYear == xSpl[2]) {
+                        if(mo >=10 ) {
+                            quarterlyValues[3] += 1;
+                        } else if(mo >= 7) {
+                            quarterlyValues[2] += 1;
+                        } else if(mo >= 4) {
+                            quarterlyValues[1] += 1;
+                        } else if(mo >= 1) {
+                            quarterlyValues[0] += 1;
+                        }
+                    }
+                }
+            }
+            sortedValues = quarterlyValues;
+        }
+
+        return [sortedName, sortedValues];
+    }
+    function teamVSDateAmount() {
+        var sortedValues = [];
+        var sortedName = [];
+        var quarterly = ["Quarter 1", "Quarter 2", "Quarter 3", "Quarter 4"];
+        var monthly = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+        var quarterlyValues = [0,0,0,0];
+        var monthlyValues = [0,0,0,0,0,0,0,0,0,0,0,0];
+        var dateData = data;
+        var ddFreq = $("#sortNoDateAmount").val();
+        var ddYear = $("#sortNoDateYearAmount").val();
+        if(ddFreq == 'monthly') {
+            sortedName = monthly;
+            for(var i =0; i< dateData.length; i++) {
+                var x = dateData[i].Occurence_Date;
+                var dateAmount = dateData[i].Amount;
+                if(x !== '') {
+                    var xSpl = x.split("/");
+                    var mo = parseInt(xSpl[0]);
+                    if(ddYear == xSpl[2]) {
+                        monthlyValues[mo-1] += dateAmount;
+                    }
+                }
+            }
+            sortedValues = monthlyValues;
+        }else {
+            sortedName = quarterly;
+            for(var i =0; i< dateData.length; i++) {
+                var x = dateData[i].Occurence_Date;
+                var dateAmount = dateData[i].Amount;
+                if(x !== '') {
+                    var xSpl = x.split("/");
+                    var mo = parseInt(xSpl[0]);
+                    if(ddYear == xSpl[2]) {
+                        if(mo >=10 ) {
+                            quarterlyValues[3] += dateAmount;
+                        } else if(mo >= 7) {
+                            quarterlyValues[2] += dateAmount;
+                        } else if(mo >= 4) {
+                            quarterlyValues[1] += dateAmount;
+                        } else if(mo >= 1) {
+                            quarterlyValues[0] += dateAmount;
+                        }
+                    }
+                }
+            }
+            sortedValues = quarterlyValues;
+        }
+
+        return [sortedName, sortedValues];
+    }
+    function sortObject(data, attr, order = "desc") {
+        var arr = [];
+        for (var prop in data) {
+            if (data.hasOwnProperty(prop)) {
+                var obj = {};
+                obj[prop] = data[prop];
+                obj.tempSortName = data[prop][attr];
+                arr.push(obj);
+            }
+        }
+
+        arr.sort(function(a, b) {
+            var at = a.tempSortName,
+                bt = b.tempSortName;
+            if(order == "asc") {
+                return at > bt ? 1 : ( at < bt ? -1 : 0 );
+            } else {
+                return at < bt ? 1 : ( at > bt ? -1 : 0 );
+            }
+        });
+
+        var result = [];
+        for (var i=0, l=arr.length; i<l; i++) {
+            var obj = arr[i];
+            delete obj.tempSortName;
+            for (var prop in obj) {
+                if (obj.hasOwnProperty(prop)) {
+                    var id = prop;
+                }
+            }
+            var item = obj[id];
+            result.push(item);
+        }
+        return result;
+    }
+    </script>  
+</head>  
+<body>  
+    <br><br>  
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="float-left">
+                        <h5>Number of Incidents Per Team</h5>
+                    </div>
+                    <div class="float-right">
+                        <select id="sortNoCount" class="mdb-select md-form">
+                            <option value="desc" selected>Descending</option>
+                            <option value="asc">Ascending</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <canvas id="teamCountChart" style="border:1px solid"></canvas>  
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="float-left">
+                        <h5>Number of Amount Per Team</h5>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="float-right">
+                        <select id="sortNoAmount" class="mdb-select md-form">
+                            <option value="desc" selected>Descending</option>
+                            <option value="asc">Ascending</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <canvas id="teamAmountChart" style="border:1px solid"></canvas>  
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="float-left">
+                        <h5>Amount of Incidents Per Month</h5>
+                    </div>
+                    <div class="float-right">
+                        <select id="sortNoDateAmount" class="mdb-select md-form">
+                            <option value="monthly" >Monthly</option>
+                            <option value="quarterly" selected>Quarterly</option>
+                        </select>
+                        <select id="sortNoDateYearAmount" class="mdb-select md-form">
+                            <option value="2020" selected>2020</option>
+                            <option value="2019">2019</option>
+                            <option value="2018">2018</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <canvas id="dateAmountChart" style="border:1px solid"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="float-left">
+                        <h5>Incidents By <span class="incidentsDate">Month</span></h5>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="float-right">
+                        <select id="sortNoDate" class="mdb-select md-form">
+                            <option value="monthly" >Monthly</option>
+                            <option value="quarterly" selected>Quarterly</option>
+                        </select>
+                        <select id="sortNoDateYear" class="mdb-select md-form">
+                            <option value="2020" selected>2020</option>
+                            <option value="2019">2019</option>
+                            <option value="2018">2018</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <canvas id="dateCountChart" style="border:1px solid"></canvas>  
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!-- <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="float-left">
+                        <h5>Amount of Issue Per Month</h5>
+                    </div>
+                    <div class="float-right">
+                        <select id="sortNoIssueAmount" class="mdb-select md-form">
+                            <option value="monthly" >Monthly</option>
+                            <option value="quarterly" selected>Quarterly</option>
+                        </select>
+                        <select id="sortNoIssueYearAmount" class="mdb-select md-form">
+                            <option value="2020" selected>2020</option>
+                            <option value="2019">2019</option>
+                            <option value="2018">2018</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <canvas id="issueAmountChart" style="border:1px solid"></canvas>
+                </div>
+            </div> -->
+        </div>
+         <div class="col-md-6">
+            
+        </div>
+    </div>
+</div>
+    
+      
+</body>  
+</html>  
