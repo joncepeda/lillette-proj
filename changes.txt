@@ -1,0 +1,347 @@
+function addTeamAmount() {
+    for(var i = 0; i < allData.length; i++) {
+        var changename =  allData[i].SubTeam.replace(/ /g,"_").toLowerCase();
+        var sortFreq = $("#sortNoAmountFreq").val();
+        var sortYear = $("#sortNoAmountYear").val();
+        var dDate = new Date(allData[i]["Occurence_x0020_Date"]);
+        var mon = dDate.getMonth();
+        var year = dDate.getFullYear();
+        if(sortFreq == 'mon') {
+            var sortFreqMon = parseInt($("#sortNoAmountMonth").val()) - 1;
+            if(mon == sortFreqMon && year == parseInt(sortYear)) {
+                if(["Amount_x0020_in_x0020_SGD"] !== null) {
+                    uniqueTeam[changename]["amount"] += parseFloat(allData[i]["Amount_x0020_in_x0020_SGD"]);
+                }
+            }
+        }else {
+            var sortFreqQua = $("#sortNoAmountQuart").val();
+            var getQua = "q"+getDateQuarter(mon) ;
+            if(getQua == sortFreqQua && year == parseInt(sortYear)) {
+                if(["Amount_x0020_in_x0020_SGD"] !== null) {
+                    uniqueTeam[changename]["amount"] += parseFloat(allData[i]["Amount_x0020_in_x0020_SGD"]);
+                }
+            } 
+        }
+    }
+}
+function addTeamCount() {
+    for(var i = 0; i < allData.length; i++) {
+        var changename =  allData[i].SubTeam.replace(/ /g,"_").toLowerCase();
+        var sortFreq = $("#sortNoCountFreq").val();
+        var sortYear = $("#sortNoCountYear").val();
+        var dDate = new Date(allData[i]["Occurence_x0020_Date"]);
+        var mon = dDate.getMonth();
+        var year = dDate.getFullYear();
+        if(sortFreq == 'mon') {
+            var sortFreqMon = parseInt($("#sortNoCountMonth").val()) - 1;
+            if(mon == sortFreqMon && year == parseInt(sortYear)) {
+                uniqueTeam[changename]["count"] += 1;
+            }
+        }else {
+            var sortFreqQua = $("#sortNoCountQuart").val();
+            var getQua = "q"+getDateQuarter(mon) ;
+            if(getQua == sortFreqQua && year == parseInt(sortYear)) {
+                uniqueTeam[changename]["count"] += 1;
+            } 
+        }
+    }
+}
+function getDateQuarter(val) {
+    var ret = 0;
+    if(val >= 9 ) {
+        ret = 4;
+    } else if(val >= 6) {
+        ret = 3;
+    } else if(val >= 3) {
+        ret = 2;
+    } else if(val >= 0) {
+        ret = 1;
+    }
+
+    return ret;
+}
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+function teamAmountChart() {  
+    var aChart = document.getElementById('teamAmountChart').getContext('2d');  
+    var teamAmount = teamVSamount();  
+    amountchart = new Chart(aChart, {  
+    type: 'bar',  
+    data:{
+        labels: teamAmount[0],  
+        datasets: [{
+            label: '# of Amount',
+            data: teamAmount[1],
+            backgroundColor: colors
+        }],
+    },  
+    options:{  
+        scales: {  
+            yAxes: [{  
+                ticks: {  
+                    beginAtZero: true    
+                }  
+            }]  
+        },
+        legend: {
+            display: false,
+        },
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                top: 20,
+                bottom: 0
+            }
+        },
+        events: false,
+        tooltips: {
+            enabled: false
+        },
+        hover: {
+            animationDuration: 0
+        },
+        animation: {
+            duration: 0,
+            onComplete: function () {
+                var chartInstance = this.chart,
+                    ctx = chartInstance.ctx;
+                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+
+                this.data.datasets.forEach(function (dataset, i) {
+                    var meta = chartInstance.controller.getDatasetMeta(i);
+                    meta.data.forEach(function (bar, index) {
+                        var data = dataset.data[index];
+                        ctx.fillText(numberWithCommas(data), bar._model.x, bar._model.y - 5);
+                    });
+                });
+            }
+        }    
+    },
+    });  
+}
+function teamCountChart() {  
+    var cChart = document.getElementById('teamCountChart').getContext('2d');
+    var teamCount = teamVScount(); 
+    countchart = new Chart(cChart, {  
+    type: 'bar',
+    responsive: true,
+    maintainAspectRatio: false,  
+    data:{
+        labels: teamCount[0],  
+        datasets: [{
+            label: '# of Incidents',
+            data: teamCount[1],
+            backgroundColor: colors
+        }],
+    },  
+    options:{  
+        scales: {  
+            yAxes: [{  
+                ticks: {  
+                    beginAtZero: true,
+                    callback: function(value) {if (value % 1 === 0) {return value;}}    
+                }  
+            }]  
+        },
+        legend: {
+            display: false,
+        },
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                top: 20,
+                bottom: 0
+            }
+        },
+        events: false,
+        tooltips: {
+            enabled: false
+        },
+        hover: {
+            animationDuration: 0
+        },
+        animation: {
+            duration: 1,
+            onComplete: function () {
+                var chartInstance = this.chart,
+                    ctx = chartInstance.ctx;
+                ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+
+                this.data.datasets.forEach(function (dataset, i) {
+                    var meta = chartInstance.controller.getDatasetMeta(i);
+                    meta.data.forEach(function (bar, index) {
+                        var data = dataset.data[index];                            
+                        ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                    });
+                });
+            }
+        }  
+    }  
+  });  
+}
+function initializeDDvalues() {
+    var currentDate = new Date();
+    var currMon = currentDate.getMonth();
+    var currYear = currentDate.getFullYear();
+
+    $("#sortNoCountQuart").val("q"+getDateQuarter(currMon));
+    $("#sortNoCountMonth").val(currMon+1);
+    $("#sortNoCountYear").val(currYear);
+
+    $("#sortNoAmountQuart").val("q"+getDateQuarter(currMon));
+    $("#sortNoAmountMonth").val(currMon+1);
+    $("#sortNoAmountYear").val(currYear);
+
+}
+$(document).ready(function() {
+    initializeDDvalues();        
+    FetchAllData();
+    $("#sortNoCount, #sortNoCountFreq, #sortNoCountQuart, #sortNoCountMonth, #sortNoCountYear").change(function() {
+        var freq = $("#sortNoCountFreq").val();
+        if(freq == "qua") {
+            $("#sortNoCountQuart").show();
+            $("#sortNoCountMonth").hide();
+        } else {
+            $("#sortNoCountQuart").hide();
+            $("#sortNoCountMonth").show();
+        }
+        resetChart("count");
+    });
+    $("#sortNoAmount, #sortNoAmountFreq, #sortNoAmountQuart, #sortNoAmountMonth, #sortNoAmountYear").change(function() {
+        var freq = $("#sortNoAmountFreq").val();
+        if(freq == "qua") {
+            $("#sortNoAmountQuart").show();
+            $("#sortNoAmountMonth").hide();
+        } else {
+            $("#sortNoAmountQuart").hide();
+            $("#sortNoAmountMonth").show();
+        }
+        resetChart("amount");
+    });
+    $("#sortNoDate, #sortNoDateYear").change(function() {
+        $(".dateCount").text($("#sortNoDate").val() + ' Year '+ $("#sortNoDateYear").val());
+        resetChart("date-count");
+    });
+    $("#sortNoDateAmount, #sortNoDateYearAmount").change(function() {
+        $(".dateAmount").text($("#sortNoDateAmount").val() + ' Year '+ $("#sortNoDateYearAmount").val());
+        resetChart("date-amount");
+    });
+    $("#sortNoIssueCount, #sortNoIssueYearCount").change(function() {
+        $(".issueCount").text($("#sortNoIssueCount").val() + ' Year '+ $("#sortNoIssueYearCount").val());
+        resetChart("issue-count");
+    });
+    $("#sortNoIssueAmount, #sortNoIssueYearAmount").change(function() {
+        $(".issueAmount").text($("#sortNoIssueAmount").val() + ' Year '+ $("#sortNoIssueYearAmount").val());
+        resetChart("issue-amount");
+    });
+});
+
+<div class="row mb-5">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="float-left">
+                    <h5>Number of Incidents Per Team</h5>
+                </div>
+                <div class="float-right">
+                    <select id="sortNoCountFreq">
+                        <option value="qua" selected>Quarterly</option>
+                        <option value="mon">Monthly</option>
+                    </select>
+                    <select id="sortNoCountQuart">
+                        <option value="q1">Q1</option>
+                        <option value="q2">Q2</option>
+                        <option value="q3">Q3</option>
+                        <option value="q4">Q4</option>
+                    </select>
+                    <select id="sortNoCountMonth">
+                        <option value="1">Jan</option>
+                        <option value="2">Feb</option>
+                        <option value="3">Mar</option>
+                        <option value="4">Apr</option>
+                        <option value="5">May</option>
+                        <option value="6">Jun</option>
+                        <option value="7">Jul</option>
+                        <option value="8">Aug</option>
+                        <option value="9">Sep</option>
+                        <option value="10">Oct</option>
+                        <option value="11">Nov</option>
+                        <option value="12">Dec</option>
+                    </select>
+                    <select id="sortNoCountYear">
+                        <option value="2020" selected>2020</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                    </select>
+                    <select id="sortNoCount">
+                        <option value="desc" selected>Descending</option>
+                        <option value="asc">Ascending</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <canvas id="teamCountChart" style="border:1px solid #dedede; padding: 10px;"></canvas>  
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="float-left">
+                    <h5>Number of Amount Per Team</h5>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="float-right">
+                    <select id="sortNoAmountFreq">
+                        <option value="qua" selected>Quarterly</option>
+                        <option value="mon">Monthly</option>
+                    </select>
+                    <select id="sortNoAmountQuart">
+                        <option value="q1">Q1</option>
+                        <option value="q2">Q2</option>
+                        <option value="q3">Q3</option>
+                        <option value="q4">Q4</option>
+                    </select>
+                    <select id="sortNoAmountMonth">
+                        <option value="1">Jan</option>
+                        <option value="2">Feb</option>
+                        <option value="3">Mar</option>
+                        <option value="4">Apr</option>
+                        <option value="5">May</option>
+                        <option value="6">Jun</option>
+                        <option value="7">Jul</option>
+                        <option value="8">Aug</option>
+                        <option value="9">Sep</option>
+                        <option value="10">Oct</option>
+                        <option value="11">Nov</option>
+                        <option value="12">Dec</option>
+                    </select>
+                    <select id="sortNoAmountYear">
+                        <option value="2020" selected>2020</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                    </select>
+                    <select id="sortNoAmount">
+                        <option value="desc" selected>Descending</option>
+                        <option value="asc">Ascending</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <canvas id="teamAmountChart" style="border:1px solid #dedede; padding: 10px;"></canvas>  
+            </div>
+        </div>
+    </div>
+</div>
